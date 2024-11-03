@@ -112,7 +112,7 @@ def main(to_pred_dir, result_save_path):
     optimizer = optim.Adam(model.parameters())
     criterion = nn.BCEWithLogitsLoss()
 
-    num_epochs = 5
+    num_epochs = 10
     for epoch in range(num_epochs):
         model.train()
         for texts, labels in train_loader:
@@ -131,7 +131,7 @@ def main(to_pred_dir, result_save_path):
                 val_loss += loss.item()
                 val_loss = val_loss / len(val_loader)
 
-        print(f'Epoch {epoch + 1}/{num_epochs} - Training Loss: {loss.item()}, Validation Loss: {val_loss}')
+        # print(f'Epoch {epoch + 1}/{num_epochs} - Training Loss: {loss.item()}, Validation Loss: {val_loss}')
 
     # 5. 保存模型
     torch.save(model.state_dict(), model_dir +'/other_code_files/lstm_model.pth')
@@ -147,13 +147,13 @@ def main(to_pred_dir, result_save_path):
     with torch.no_grad():
         for texts in test_loader:
             outputs = loaded_model(texts).squeeze(1)
-            print('-'*10)
-            print(outputs)
+            # print('-'*10)
+            # print(outputs)
             probs = torch.sigmoid(outputs)
             # 将概率四舍五入到最接近的整数，得到预测的标签
             predicted_labels = torch.round(probs)
 
-            print('-'*10)
+            # print('-'*10)
     res_labels = [int(i) for i in predicted_labels]
     # 将预测结果转换为原始标签
 
