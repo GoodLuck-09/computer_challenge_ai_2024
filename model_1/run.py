@@ -112,7 +112,7 @@ def main(to_pred_dir, result_save_path):
     optimizer = optim.Adam(model.parameters())
     criterion = nn.BCEWithLogitsLoss()
 
-    num_epochs = 10
+    num_epochs = 5
     for epoch in range(num_epochs):
         model.train()
         for texts, labels in train_loader:
@@ -143,7 +143,7 @@ def main(to_pred_dir, result_save_path):
 
     # 7. 对测试集进行预测
     test_loader = DataLoader(test_dataset, batch_size=batch_size)
-
+    predicted_labels_list = []
     with torch.no_grad():
         for texts in test_loader:
             outputs = loaded_model(texts).squeeze(1)
@@ -152,9 +152,9 @@ def main(to_pred_dir, result_save_path):
             probs = torch.sigmoid(outputs)
             # 将概率四舍五入到最接近的整数，得到预测的标签
             predicted_labels = torch.round(probs)
-
+            predicted_labels_list.extend(predicted_labels)
             # print('-'*10)
-    res_labels = [int(i) for i in predicted_labels]
+    res_labels = [int(i) for i in predicted_labels_list]
     # 将预测结果转换为原始标签
 
     #=-=-=-=-==-=-=-=-==-=-=-=-==-=-=-=-==-=-=-=-==-=-=-=-==-=-=-=-==
